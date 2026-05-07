@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+
+@theme {
+  --color-navbar: #AA8F66;
+  --color-textplace: #FFEEDB;
+  --color-edit: #ED9840;
+  --color-delete: #BA3B46;
+  --color-add: #61C9A8;
+  --color-navfontcolor: #F2E9E4;
+}

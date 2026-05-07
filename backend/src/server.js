@@ -2,7 +2,9 @@ import express from "express";
 import connectdb from "./config/db.js";
 import dotenv from "dotenv"
 import todoRoutes from "./routes/todoRoutes.js";
+import dns from "dns/promises"
 
+dns.setServers(["1.1.1.1"]);
 dotenv.config()
 
 const app = express();
