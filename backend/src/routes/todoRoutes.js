@@ -3,7 +3,7 @@ import { createTodoList, deleteTodoList, getAllTodoList, getTodoListById, update
 
 const router = express.Router();
 
-router.get('', getAllTodoList);
+router.get('/', getAllTodoList);
 router.get('/:id', getTodoListById);
 router.post('/create', createTodoList);
 router.put('/edit/:id', updateTodoList);
