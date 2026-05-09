@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import api from "../util/axios";
 import toast from "react-hot-toast";
 
@@ -10,6 +10,8 @@ const EditPage = () => {
   const [updating, setUpdating] = useState(false);
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchList = async () => {
@@ -26,7 +28,37 @@ const EditPage = () => {
     fetchList();
   }, []);
 
-  // console.log(list.title)
+  const handleUpdate = async() => {
+    if(!list.title.trim()){
+      toast.error("Title Field is Required");
+      return;
+    }
+    setUpdating(true)
+    try {
+      await api.put(`/todo/edit/${id}`, list)
+      toast.success("Successfully Updated.")
+      navigate('/')
+    } catch (error) {
+      toast.error("Failed to Update the TODO");
+      console.log(error.message)
+    }finally{
+      setUpdating(false);
+    }
+  }
+
+  const handleDelete = async() => {
+    if(!window.confirm("Are you sure you want to delete this TODO?")) return;
+    try {
+      const res = await api.delete(`/todo/${id}`);
+      toast.success("Successfully Deleted.")
+      navigate('/');
+    } catch (error) {
+      toast.error("Failed to delete the TODO")
+      console.log(error.message);
+    }
+  }
+
+  // console.log(id)
 
   return (
     <div>
@@ -51,7 +83,7 @@ const EditPage = () => {
         <input
           placeholder="Title"
           className="bg-textplace min-w-5/12 rounded-xl min-h-14 font-bold text-2xl px-4"
-          value={list.title || " "}
+          value={list.title || ""}
           onChange={(e) => setList({ ...list, title: e.target.value })}
         />
       </div>
@@ -64,10 +96,10 @@ const EditPage = () => {
         />
       </div>
       <div className="flex mx-auto justify-end w-5/12 gap-4 pt-6">
-        <button className="min-w-28 min-h-14 bg-edit rounded-xl font-semibold text-2xl hover:ring-2 hover:ring-offset-2 transition-all">
-          Update
+        <button onClick={() => handleUpdate()} className="min-w-28 min-h-14 bg-edit rounded-xl font-semibold text-2xl hover:ring-2 hover:ring-offset-2 transition-all">
+          {updating ? "Updating" : "Update"}
         </button>
-        <button className="min-w-28 min-h-14 bg-delete rounded-xl font-semibold text-2xl hover:ring-2 hover:ring-offset-2 transition-all">
+        <button onClick={() => handleDelete()} className="min-w-28 min-h-14 bg-delete rounded-xl font-semibold text-2xl hover:ring-2 hover:ring-offset-2 transition-all">
           Delete
         </button>
       </div>

@@ -40,6 +40,9 @@ const HomePage = () => {
         description,
       });
       setLists((prev) => [response.data, ...prev])
+
+      setTitle("");
+      setDescription("");
       toast.success("Successfully added the TODO");
     } catch (error) {
       toast.error("Failed to Add the TODO");
